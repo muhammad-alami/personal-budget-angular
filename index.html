@@ -3,27 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Budget</title>
-    <link rel="stylesheet" href="reset.css"> <!--removing the leading / so it works for both local and remote-->
+    <!-- This is an SEO Change -->
+    <meta name="description" content="Personal Budget app... Thats Free!!!">
+    <!-- This is an SEO Change -->
+    <title>Personal Budget - Super Simple Budget Demo</title>
+    <!-- This is an SEO Change -->
+    <meta name="keywords" content="money, saving, budget, personal finance, expenses">
+    <link rel="stylesheet" href="reset.css"> <!--removed the leading / so it works for both local and remote-->
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
-
-    <div class="menu">
+    <a href="#main-content" class="skip-link">Skip to main content</a> <!-- This is an A11y Change -->
+    <!-- This is a Semantic HTML Change --> <!-- used <nav> instead of <div> so it is seen as the navigation for the site -->
+    <nav class="menu" aria-label="Main navigation"> <!-- This is an A11y Change --> <!-- added aria-label -->
         <ul>
-            <li><a href="index.html">Homepage</a></li> <!-- changed to "index.html", "/" would lead us to the root of the server which is incorrect since the project is in a subfolder pb -->
+            <!-- This is an A11y Change --> <!-- added aria-current="page" to indicate the current page -->
+            <li><a href="index.html" aria-current="page">Homepage</a></li> <!-- changed to "index.html", "/" would lead us to the root of the server which is incorrect since the project is in a subfolder pb -->
             <li><a href="about.html">About</a></li> <!-- removed leading / -->
             <li><a href="login.html">Login</a></li> <!-- removed leading / -->
             <li><a href="https://google.com">Google</a></li>
         </ul>
-    </div>
-
-    <div class="hero">
+    </nav>
+    <!-- This is a Semantic HTML Change -->
+    <header class="hero">
         <h1>Personal Budget</h1>
         <h2>A personal-budget management app</h2>
-    </div>
+    </header>
 
-    <div class="container center">
+    <!-- This is a Semantic HTML Change --> <!-- used <main> instead of <div> so it is seen as the main content of the page -->
+    <main class="container center">
 
         <div class="page-area">
 
@@ -93,7 +101,7 @@
 
         </div>
 
-    </div>
+    </main>
 
     <div class="bottom">
         <div class="center">
