@@ -1,9 +1,16 @@
+
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Chart } from 'chart.js';
+import Chart from 'chart.js/auto';
 
-type BudgetItem = { title: string; budget: number };
-type ApiResponse = { data: { myBudget: BudgetItem[] } };
+interface BudgetItem {
+  title: string;
+  budget: number;
+}
+
+interface BudgetResponse {
+  myBudget: BudgetItem[];
+}
 
 @Component({
   selector: 'pb-homepage',
@@ -11,37 +18,38 @@ type ApiResponse = { data: { myBudget: BudgetItem[] } };
   styleUrls: ['./homepage.component.scss']
 })
 export class HomepageComponent implements OnInit {
-
   public dataSource = {
-            datasets: [
-                {
-                    data: [] as number[],
-                    backgroundColor: [
-                        '#ffdd56',
-                        '#ff6384',
-                        '#36a2eb',
-                        '#fd6b19',
-                    ],
-                }
-            ],
-            labels: [] as string[],
-        };
-
+    datasets: [
+      {
+        data: [] as number[],
+        backgroundColor: ['#ffcd56', '#ff6384', '#36a2eb', '#fd6b19']
+      }
+    ],
+    labels: [] as string[]
+  };
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-  this.http.get('http://localhost:3000/budget')
-    .subscribe((res: any) => {
-
-      for (const item of res.data.myBudget) {
-        this.dataSource.datasets[0].data.push(item.budget);
-        this.dataSource.labels.push(item.title);
-      }
-      this.createChart();
-    });
+    this.http
+      .get<BudgetResponse>('http://localhost:3000/budget')
+      .subscribe({
+        next: (res) => {
+          if (!res || !Array.isArray(res.myBudget)) {
+            console.error('Unexpected API response', res);
+            return;
+          }
+          for (const item of res.myBudget) {
+            this.dataSource.datasets[0].data.push(item.budget);
+            this.dataSource.labels.push(item.title);
+          }
+          this.createChart();
+        },
+        error: (err) => console.error('API error', err)
+      });
   }
-  private createChart() {
+
+  private createChart(): void {
     const canvas = document.getElementById('myChart') as HTMLCanvasElement | null;
     if (!canvas) {
       console.error('Canvas element with id "myChart" not found.');
@@ -52,10 +60,9 @@ export class HomepageComponent implements OnInit {
       console.error('2D context not available on canvas.');
       return;
     }
-    const myChart = new Chart(ctx, {
-        type: 'pie',
-        data: this.dataSource
+    new Chart(ctx, {
+      type: 'pie',
+      data: this.dataSource
     });
   }
-
 }
