@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
+const fs = require('fs');
+
 const app = express();
 const port = 3000;
-var fs = require('fs');
 
-
+app.use(cors({ origin: 'http://localhost:4200' }));
 
 app.use('/', express.static('public'));
 
@@ -14,14 +16,13 @@ app.get('/hello', (req, res) => {
 });
 
 app.get('/budget', (req, res) => {
-    fs.readFile('./budget.json', 'utf8', function (err, text) {
-
-        if (err) {
-            return res.status(500).send('Error reading budget file');
-        }
-        var data = JSON.parse(text);
-        res.json(data);
-    });
+  fs.readFile(__dirname + '/budget.json', 'utf8', (err, text) => {
+    if (err) return res.status(500).send('Error reading budget file');
+    const data = JSON.parse(text);           
+    
+    res.json({ data });                      
+    
+  });
 });
 
 app.listen(port, () => {
